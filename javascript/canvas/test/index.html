@@ -29,7 +29,7 @@
       let x = e.touches[0].clientX
       let y = e.touches[0].clientY
       drawLine(lastPoint[0], lastPoint[1], x, y)
-      lastPoint = [e.touches[0].clientX, e.touches[0].clientY]
+      lastPoint = [x, y]
     }
   } else {
     canvas.onmousedown = (e) => {
