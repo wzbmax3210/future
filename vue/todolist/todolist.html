@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>TodoList</title>
+  <style>
+    li {
+      list-style-type: none;
+    }
+    #app {
+      text-align: center;
+    }
+    .taskStatus a {
+      margin-right: 10px;
+      color: #89afd6;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div id="main">
+    亲你还有{{leftTodo}}件事要完成
+  </div>
+  <div>
+    <input type="text" v-model="todo" @keyup.enter="addTodo" placeholder="按回车确认">
+  </div>
+  <div>
+    <ul>
+      <div v-for="(item, key) of todoLists" :key=`${key}_x` style="display: flex;justify-content: center" v-show="showStatus === 'all' || item.done ^ !doneFlag">
+        <input type="checkbox" v-model="item.done">
+        <li :style="{'text-decoration': item.done ? 'line-through' : 'none'}" v-show="!item.isEdit" @dblclick="dblclick(key)">{{item.todo}}</li>
+        <input :id="key+'_input'" v-model="item.todo" v-show="item.isEdit" @blur="item.isEdit = false">
+        <button @click="deleteTodo(key)">删除</button>
+      </div>
+    </ul>
+  </div>
+  <div class="taskStatus">
+    <a @click="() => {showStatus = 'all'}">全部任务</a>
+    <a @click="() => {showStatus = 'done' ; doneFlag = true}">已完成</a>
+    <a @click="() => {showStatus = 'done' ; doneFlag = false}">未完成</a>
+  </div>
+</div>
+</body>
+</html>
+<script src="vue.js"></script>
+<script>
+let app = new Vue({
+  el: '#app',
+  data: {
+    todo: '',
+    todoLists: [],
+    showStatus: 'all',
+    doneFlag: false
+  },
+  methods: {
+    addTodo() {
+      if (this.todo === '') {
+        return false
+      }
+      this.todoLists.push({todo: this.todo, done: false, isEdit: false})
+      this.todo = ''
+    },
+    deleteTodo(key) {
+      this.todoLists.splice(key, 1)
+    },
+    dblclick(key) {
+      this.todoLists[key].isEdit = true
+      this.$nextTick(() => {
+        document.getElementById(`${key}_input`).focus()
+      })
+    }
+  },
+  computed: {
+    leftTodo() {
+      return this.todoLists.filter(item => !item.done).length
+    }
+  }
+})
+</script>

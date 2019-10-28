@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>heartbeat</title>
+</head>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  .heart {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: all .5s;
+  }
+  .heart:hover {
+    transform: scale(1.5);
+  }
+  .heart > .bottom {
+    width: 50px;
+    height: 50px;
+    transform: rotate(45deg);
+    background: red;
+  }
+  .heart > .left {
+    position: absolute;
+    bottom: 100%;
+    right: 100%;
+    width: 50px;
+    height: 50px;
+    transform: rotate(45deg) translateX(32px);
+    border-radius: 50% 0 0 50%;
+    background: red;
+  }
+  .heart > .right {
+    position: absolute;
+    bottom: 100%;
+    left: 100%;
+    width: 50px;
+    height: 50px;
+    transform: rotate(45deg) translateY(32px);
+    border-radius:  50% 50% 0 0;
+    background: red;
+  }
+</style>
+<body>
+<div class="heart">
+  <div class="left"></div>
+  <div class="right"></div>
+  <div class="bottom"></div>
+</div>
+</body>
+</html>
