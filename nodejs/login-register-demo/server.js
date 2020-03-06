@@ -19,7 +19,59 @@ var server = http.createServer(function(request, response){
 
   console.log('有请求发送！路径（带查询参数）为：' + pathWithQuery)
 
-  if (path === '/register' && method === 'POST') {
+  if (path === '/home.html') {
+    const cookiesArray = request.headers['cookie'].split(';')
+    const userArray = JSON.parse(fs.readFileSync('./db/users.json'))
+    const sessionArray = JSON.parse(fs.readFileSync('./session.json'))
+    const homeHtml = fs.readFileSync('./public/home.html').toString()
+    let sessionId
+    try {
+      sessionId = cookiesArray.filter(x => x.trim().indexOf('session_id=') >= 0)[0].split('=')[1]
+    } catch (e) {
+      console.log('userId error')
+    }
+    const loginUser = userArray.find(user => user.id === sessionArray[sessionId].userId)
+    if (sessionId) {
+      string = homeHtml.replace('{{loginStatus}}', '已登录').replace('{{userName}}', loginUser.user)
+    } else {
+      string = homeHtml.replace('{{loginStatus}}', '未登录').replace('{{userName}}', '')
+    }
+    response.write(string)
+    response.end()
+  } else if (path === '/login' && method === 'POST') {
+    let responseJson = {
+      success: true,
+      msg: ''
+    }
+    const array = []
+    response.setHeader('Content-Type', 'text/json;charset=utf-8')
+    request.on('data', chunk => {
+      array.push(chunk)
+    })
+    request.on('end', () => {
+      const string = Buffer.concat(array).toString()
+      const loginData = JSON.parse(string)
+      if (!loginData.user || !loginData.password) {
+        responseJson.success = false
+        responseJson.msg = '用户名或者密码为空，请重新输入'
+      } else {
+        const usersArray = JSON.parse(fs.readFileSync('./db/users.json'))
+        const loginUser = usersArray.find((user) => user.name === loginData.name && user.password === loginData.password)
+        if (loginUser === undefined) {
+          responseJson.success = false
+          responseJson.msg = '用户名或密码错误，请重新输入'
+        } else {
+          const random = Math.random()
+          const session = JSON.parse(fs.readFileSync('./session.json'))
+          session[random] = {userId: loginUser.id}
+          fs.writeFileSync('./session.json', JSON.stringify(session))
+          response.setHeader('Set-Cookie', `session_id=${random}; HttpOnly`)
+        }
+      }
+      //response.write(JSON.stringify(responseJson))
+      response.end(JSON.stringify(responseJson))
+    })
+  } else if (path === '/register' && method === 'POST') {
     let responseJson = {
       success: true,
       msg: ''
