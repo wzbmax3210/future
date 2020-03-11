@@ -1,0 +1,19 @@
+@keyframes change {
+    0% {
+        background: red;
+    }
+    100% {
+        background: blue;
+    }
+}
+
+.circle {
+    width: 30vw;
+    height: 30vw;
+    border-radius: 50%;
+    border: 1px solid red;
+}
+
+.circle.active {
+    animation: change 1s infinite alternate linear;
+}

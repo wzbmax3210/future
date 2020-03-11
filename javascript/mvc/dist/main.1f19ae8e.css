@@ -1,0 +1,76 @@
+*, *::before, *::after {padding: 0; margin: 0}
+li {list-style: none}
+* {box-sizing: border-box}
+
+body {
+    overflow: hidden;
+}
+
+.page {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.page > section {
+    width: 50vw;
+    height: 50vh;
+    border: 1px solid grey;
+}
+
+#app1 {
+
+}
+.tab-bar {
+    display: flex;
+}
+
+.tab-bar li {
+    width: 50%;
+}
+
+.tab-bar li.selected {
+    background: #ffe600;
+    color: #666666;
+}
+
+.tab-content li {
+    display: none;
+}
+
+.tab-content li.active {
+    display: block;
+}
+
+.square {
+    border: 1px solid blue;
+    margin-top: 10vw;
+    margin-left: 10vw;
+    width: 10vw;
+    height: 10vw;
+    transition: transform 1s;
+}
+
+.square.active {
+    transform: translateX(15vw);
+}
+@keyframes change {
+    0% {
+        background: red;
+    }
+    100% {
+        background: blue;
+    }
+}
+
+.circle {
+    width: 30vw;
+    height: 30vw;
+    border-radius: 50%;
+    border: 1px solid red;
+}
+
+.circle.active {
+    animation: change 1s infinite alternate linear;
+}
+
+/*# sourceMappingURL=/main.1f19ae8e.css.map */
